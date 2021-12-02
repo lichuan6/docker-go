@@ -8,14 +8,15 @@ WORKDIR /build
 # Let's cache modules retrieval - those don't change so often
 COPY go.mod .
 COPY go.sum .
-RUN go mod download
+RUN go env -w GOPROXY=https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct && go mod download
 
 # Copy the code necessary to build the application
 # You may want to change this to copy only what you actually need.
 COPY . .
 
 # Build the application
-RUN go build .
+RUN go env -w GOPROXY=https://goproxy.cn,https://gocenter.io,https://goproxy.io,direct && go build .
+# RUN go build .
 
 # Let's create a /dist folder containing just the files necessary for runtime.
 # Later, it will be copied as the / (root) of the output image.
