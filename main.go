@@ -30,6 +30,11 @@ func main() {
 		})
 	})
 
+	go func() {
+		time.Sleep(time.Second * 5)
+		panic("潘妮可")
+	}()
+
 	s := &http.Server{
 		Addr:           ":9090",
 		Handler:        r,
