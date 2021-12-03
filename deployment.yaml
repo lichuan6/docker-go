@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-go
+  labels:
+    app: docker-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-go
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3030"
+        prometheus.io/path: /metrics
+      labels:
+        app: docker-go
+    spec:
+      containers:
+        - name: docker-go
+          image: lichuan33/docker-go
+          imagePullPolicy: Always
+          ports:
+            - name: http-web
+              containerPort: 9090
+          resources:
+            limits:
+              cpu: 10m
+              memory: 50Mi
+            requests:
+              cpu: 10m
+              memory: 50Mi
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - operator: "Exists"
+          effect: "NoExecute"
+        - operator: "Exists"
+          effect: "NoSchedule"
